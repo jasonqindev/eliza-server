@@ -1,6 +1,6 @@
 {
     "name": "cz",
-    "clients": [],
+    "clients": ["twitter"],
     "modelProvider": "openai",
     "settings": {
         "model": "gpt-4o-mini",

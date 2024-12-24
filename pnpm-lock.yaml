@@ -198,6 +198,9 @@ importers:
       '@elizaos/plugin-ton':
         specifier: workspace:*
         version: link:../packages/plugin-ton
+      '@elizaos/plugin-web-search':
+        specifier: workspace:*
+        version: link:../packages/plugin-web-search
       '@elizaos/plugin-zksync-era':
         specifier: workspace:*
         version: link:../packages/plugin-zksync-era
