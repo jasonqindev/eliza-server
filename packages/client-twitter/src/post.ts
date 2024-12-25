@@ -6,7 +6,6 @@ import {
     IAgentRuntime,
     ModelClass,
     stringToUuid,
-    parseBooleanFromText,
 } from "@elizaos/core";
 import { elizaLogger } from "@elizaos/core";
 import { ClientBase } from "./base.ts";
@@ -100,7 +99,7 @@ export class TwitterPostClient {
     private lastProcessTime: number = 0;
     private stopProcessingActions: boolean = false;
 
-    async start(postImmediately: boolean = false) {
+    async start() {
         if (!this.client.profile) {
             await this.client.init();
         }
@@ -159,25 +158,14 @@ export class TwitterPostClient {
             }
         };
 
-        if (
-            this.runtime.getSetting("POST_IMMEDIATELY") != null &&
-            this.runtime.getSetting("POST_IMMEDIATELY") != ""
-        ) {
-            postImmediately = parseBooleanFromText(
-                this.runtime.getSetting("POST_IMMEDIATELY")
-            );
-        }
-
-        if (postImmediately) {
+        if (this.runtime.getSetting("POST_IMMEDIATELY") === "true") {
             await this.generateNewTweet();
         }
+
         generateNewTweetLoop();
 
         // Add check for ENABLE_ACTION_PROCESSING before starting the loop
-        const enableActionProcessing =
-            this.runtime.getSetting("ENABLE_ACTION_PROCESSING") ?? false;
-
-        if (enableActionProcessing) {
+        if (this.runtime.getSetting("ENABLE_ACTION_PROCESSING") === "true") {
             processActionsLoop().catch((error) => {
                 elizaLogger.error(
                     "Fatal error in process actions loop:",
@@ -187,7 +175,6 @@ export class TwitterPostClient {
         } else {
             elizaLogger.log("Action processing loop disabled by configuration");
         }
-        generateNewTweetLoop();
     }
 
     constructor(client: ClientBase, runtime: IAgentRuntime) {
